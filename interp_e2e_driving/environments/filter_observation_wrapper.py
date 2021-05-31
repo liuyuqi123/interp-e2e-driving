@@ -13,6 +13,7 @@ import numpy as np
 import tensorflow as tf
 from tf_agents.environments import wrappers
 
+
 class FilterObservationWrapper(wrappers.PyEnvironmentBaseWrapper):
   """Environment wrapper to filter observation channels."""
 
