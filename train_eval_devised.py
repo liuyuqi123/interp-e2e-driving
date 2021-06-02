@@ -457,6 +457,8 @@ def train_eval(
                 model_network_ctor = sequential_latent_network.SequentialLatentModelNonHierarchical
             else:
                 raise NotImplementedError
+
+            # this is the agent instance
             model_net = model_network_ctor(input_names, input_names + mask_names)
 
             # Get the latent spec
