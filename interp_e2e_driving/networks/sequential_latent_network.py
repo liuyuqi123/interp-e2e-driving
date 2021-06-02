@@ -448,7 +448,6 @@ class SequentialLatentModelHierarchical(tf.Module):
       latent1_conditional_prior_samples), (latent2_posterior_samples, latent2_prior_samples,
       latent2_conditional_prior_samples)
 
-
   def compute_loss(self, images, actions, step_types, latent_posterior_samples_and_dists=None, num_first_image=5):
     # Compuate the latents
     latent1_dists, latent2_dists, latent1_samples, latent2_samples = \
@@ -668,7 +667,13 @@ class SequentialLatentModelNonHierarchical(tf.Module):
                kl_analytic=True,
                decoder_stddev=np.sqrt(0.1, dtype=np.float32),
                name=None):
-    """Creates an instance of `SequentialLatentModelHierarchical`.
+    """
+    Read codes:
+       - sss
+
+
+    Creates an instance of `SequentialLatentModelNonHierarchical`.
+
     Args:
       input_names: the names of the observation inputs (e.g, 'camera', 'lidar').
       reconstruct_names: names of the outputs to reconstruct (e.g, 'mask').

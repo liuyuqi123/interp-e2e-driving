@@ -264,6 +264,21 @@ def pad_and_concatenate_videos(videos, image_keys, is_dict=False):
 
 
 def get_latent_reconstruction_videos(latents, model_net):
+    """
+    Guessing:
+     - This method is supposed to call the decoder of the model,
+       reconstruct group images through given latent trajectory.
+     - This method is only called by latent_sac selection
+
+    Args:
+        latents:
+        model_net:
+
+    Returns:
+        videos: list of images.
+
+    """
+
     videos = []
     for latent_eps in latents:
         videos.append([])
@@ -443,12 +458,14 @@ def train_eval(
         eval_tf_env = tf_py_environment.TFPyEnvironment(eval_py_env)
         fps = int(np.round(1.0 / (py_env.dt * action_repeat)))
 
+        # todo check format of these specs
         # Specs
         time_step_spec = tf_env.time_step_spec()
         observation_spec = time_step_spec.observation
         action_spec = tf_env.action_spec()
 
-        ## Make tf agent
+        # note： Make tf agent, the RL agent has several wrapper
+        # todo check the usage of inner agent
         if agent_name == 'latent_sac':
             # Get model network for latent sac
             if model_network_ctor_type == 'hierarchical':
@@ -771,6 +788,7 @@ def train_eval(
 
         train_step = common.function(train_step)
 
+        # register train step method for latent_sac experiment, not calling it
         if agent_name == 'latent_sac':
             def train_model_step():
                 experience, _ = next(iterator)
@@ -787,6 +805,8 @@ def train_eval(
         for iteration in range(num_iterations):
             start_time = time.time()
 
+            # note: this is the roll_out loop of general RL agent
+            #  this method seems not require roll out continually
             if agent_name == 'latent_sac' and iteration < initial_model_train_steps:
                 train_model_step()
             else:
